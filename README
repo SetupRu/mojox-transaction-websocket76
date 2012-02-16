@@ -1,0 +1,82 @@
+NAME
+
+    MojoX::Transaction::WebSocket76 - WebSocket version hixie-76 transaction
+    container
+
+SYNOPSIS
+
+        use MojoX::Transaction::WebSocket76;
+
+        my $ws = MojoX::Transaction::WebSocket76->new;
+
+DESCRIPTION
+
+    MojoX::Transaction::WebSocket76 is a container for WebSocket transactions
+    as described in hixie-76 draft. Support for this version of the protocol
+    was removed in Mojolicious 1.17. But last version of the Safari browser
+    (5.0.1) supports only it.
+
+    To support for both versions of the protocol (last and hixie-76 draft) in
+    your Mojolicious application, add:
+
+        # In application module.
+        package MyApp;
+
+        # Override Mojolicious::build_tx().
+        sub build_tx {
+            my ($self) = @_;
+            # Use your own transaction module.
+            my $tx = MyApp::Transaction->new;
+            $self->plugins->emit_hook(after_build_tx => $tx, $self);
+            return $tx;
+        }
+
+        # In transaction module.
+        package MyApp::Transaction;
+
+        use Mojo::Transaction::WebSocket;
+        use MojoX::Transaction::WebSocket76;
+
+        use Mojo::Base 'Mojo::Transaction::HTTP';
+
+        # Override Mojo::Transaction::HTTP::server_read().
+        sub server_read {
+            # ...
+            # Need to change only this piece of code.
+            if (lc($req->headers->upgrade || '') eq 'websocket') {
+                # Upgrade to WebSocket of needed version.
+                $self->emit(upgrade =>
+                      ($req->headers->header('Sec-WebSocket-Key1')
+                    && $req->headers->header('Sec-WebSocket-Key2'))
+                        ? MojoX::Transaction::WebSocket76->new(handshake => $self)
+                        : Mojo::Transaction::WebSocket->new(handshake => $self)
+                );
+            }
+            # ...
+        }
+
+EVENTS
+
+    MojoX::Transaction::WebSocket76 inherits all events from
+    Mojo::Transaction::WebSocket.
+
+ATTRIBUTES
+
+    MojoX::Transaction::WebSocket76 inherits all attributes from
+    Mojo::Transaction::WebSocket.
+
+METHODS
+
+    MojoX::Transaction::WebSocket76 inherits all methods from
+    Mojo::Transaction::WebSocket.
+
+DEBUGGING
+
+    You can set the MOJO_WEBSOCKET_DEBUG environment variable to get some
+    advanced diagnostics information printed to STDERR.
+
+        MOJO_WEBSOCKET_DEBUG=1
+
+SEE ALSO
+
+    Mojolicious, Mojo::Transaction::WebSocket.
