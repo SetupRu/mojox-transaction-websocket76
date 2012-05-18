@@ -5,7 +5,7 @@ use Mojo::Util ('md5_bytes');
 use Mojo::Base 'Mojo::Transaction::WebSocket';
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 use constant DEBUG => &Mojo::Transaction::WebSocket::DEBUG;
@@ -18,7 +18,7 @@ use constant {
 
 
 sub build_frame {
-	my ($self, undef, $type, $bytes) = @_;
+	my ($self, undef, undef, undef, undef, $type, $bytes) = @_;
 
 	warn("BUILDING FRAME\n") if DEBUG;
 
@@ -66,7 +66,7 @@ sub parse_frame {
 	}
 
 	# Result does compatible with Mojo::Transaction::WebSocket.
-	return [1, $type, $bytes];
+	return [1, 0, 0, 0, $type, $bytes];
 }
 
 sub server_handshake {
@@ -134,6 +134,8 @@ sub fix_headers {
 	$self->SUPER::fix_headers(@_[1 .. $#_]);
 	# Suppress "Content-Length" header.
 	$self->headers->remove('Content-Length');
+
+	return $self;
 }
 
 
