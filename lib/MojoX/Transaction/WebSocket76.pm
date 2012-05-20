@@ -31,7 +31,7 @@ sub build_frame {
 			warn('BYTES: ', $bytes, "\n");
 		}
 		else {
-			warn("NOTHING\n") 
+			warn("NOTHING\n")
 		}
 	}
 
@@ -61,7 +61,7 @@ sub parse_frame {
 			warn('BYTES: ', $bytes, "\n");
 		}
 		else {
-			warn("NOTHING\n") 
+			warn("NOTHING\n")
 		}
 	}
 
@@ -140,3 +140,118 @@ sub fix_headers {
 
 
 1;
+
+
+__END__
+
+=head1 NAME
+
+MojoX::Transaction::WebSocket76 - WebSocket version hixie-76 transaction
+container
+
+=head1 SYNOPSIS
+
+    use MojoX::Transaction::WebSocket76;
+
+    my $ws = MojoX::Transaction::WebSocket76->new;
+
+=head1 DESCRIPTION
+
+MojoX::Transaction::WebSocket76 is a container for WebSocket transactions as
+described in L<hixie-76 draft|http://tools.ietf.org/html/draft-hixie-thewebsocketprotocol-76>.
+Support for this version of the protocol was removed in L<Mojolicious> 1.17. But
+last version of the Safari browser (5.0.1) supports only it.
+
+To support for both versions of the protocol (last and hixie-76 draft) in your
+Mojolicious application, add:
+
+    # In application module.
+    package MyApp;
+
+    # Override Mojolicious::build_tx().
+    sub build_tx {
+        my ($self) = @_;
+        # Use your own transaction module.
+        my $tx = MyApp::Transaction->new;
+        $self->plugins->emit_hook(after_build_tx => $tx, $self);
+        return $tx;
+    }
+
+    # In transaction module.
+    package MyApp::Transaction;
+
+    use Mojo::Transaction::WebSocket;
+    use MojoX::Transaction::WebSocket76;
+
+    use Mojo::Base 'Mojo::Transaction::HTTP';
+
+    # Override Mojo::Transaction::HTTP::server_read().
+    sub server_read {
+        # ...
+        # Need to change only this piece of code.
+        if (lc($req->headers->upgrade || '') eq 'websocket') {
+            # Upgrade to WebSocket of needed version.
+            $self->emit(upgrade =>
+                  ($req->headers->header('Sec-WebSocket-Key1')
+                && $req->headers->header('Sec-WebSocket-Key2'))
+                    ? MojoX::Transaction::WebSocket76->new(handshake => $self)
+                    : Mojo::Transaction::WebSocket->new(handshake => $self)
+            );
+        }
+        # ...
+    }
+
+=head1 EVENTS
+
+MojoX::Transaction::WebSocket76 inherits all events from
+L<Mojo::Transaction::WebSocket>.
+
+=head1 ATTRIBUTES
+
+MojoX::Transaction::WebSocket76 inherits all attributes from
+L<Mojo::Transaction::WebSocket>.
+
+=head1 METHODS
+
+MojoX::Transaction::WebSocket76 inherits all methods from
+L<Mojo::Transaction::WebSocket>.
+
+=head1 DEBUGGING
+
+You can set the C<MOJO_WEBSOCKET_DEBUG> environment variable to get some
+advanced diagnostics information printed to STDERR.
+
+    MOJO_WEBSOCKET_DEBUG=1
+
+=head1 SEE ALSO
+
+L<Mojolicious>, L<Mojo::Transaction::WebSocket>.
+
+=head1 SUPPORT
+
+=over 4
+
+=item Repository
+
+L<http://github.com/dionys/mojox-transaction-websocket76>
+
+=item Bug tracker
+
+L<http://github.com/dionys/mojox-transaction-websocket76/issues>
+
+=back
+
+=head1 AUTHOR
+
+Denis Ibaev, C<dionys@cpan.org>.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2012, Denis Ibaev.
+
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
+=cut
