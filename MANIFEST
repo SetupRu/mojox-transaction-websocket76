@@ -1,5 +1,6 @@
 Changes
 lib/MojoX/Transaction/WebSocket76.pm
+Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 META.json
