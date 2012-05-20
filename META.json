@@ -31,7 +31,7 @@
         },
         "runtime" : {
             "requires" : {
-                "Mojolicious" : "2.52",
+                "Mojolicious" : "2.47",
                 "Test::More" : 0
             }
         }

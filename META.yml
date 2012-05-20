@@ -17,7 +17,7 @@ no_index:
     directory:
         - t
 requires:
-    Mojolicious: 2.52
+    Mojolicious: 2.47
     Test::More: 0
 resources:
     bugtracker: http://github.com/dionys/mojox-transaction-websocket76/issues
