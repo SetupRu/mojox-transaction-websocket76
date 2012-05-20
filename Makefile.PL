@@ -23,7 +23,7 @@ WriteMakefile(
 		no_index  => {directory => ['t']},
 	},
 	PREREQ_PM     => {
-		'Mojolicious' => '2.52',
+		'Mojolicious' => '2.47',
 		'Test::More'  => 0,
 	},
 	dist          => {COMPRESS => 'gzip -9f', SUFFIX => 'gz'},

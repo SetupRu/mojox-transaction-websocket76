@@ -2,7 +2,8 @@ Revision history for MojoX::Transaction::WebSocket76
 
 0.02
         - Fixed response processing related bug.
-        - Upgraded to work with new versions of Mojolicious (>= 2.52).
+        - Upgraded to work with new versions of Mojolicious (>= 2.47).
+        - Improved documentation.
 
 0.01
         - Initial public release.
