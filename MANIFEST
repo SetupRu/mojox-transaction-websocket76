@@ -2,6 +2,8 @@ Changes
 lib/MojoX/Transaction/WebSocket76.pm
 MANIFEST
 MANIFEST.SKIP
+META.json
+META.yml
 README
 t/00-use.t
 t/01-pod.t
