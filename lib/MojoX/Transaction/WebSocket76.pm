@@ -123,8 +123,7 @@ sub _challenge {
 1;
 
 
-package # Hide from PAUSE.
-	MojoX::Transaction::WebSocket76::_Response;
+package MojoX::Transaction::WebSocket76::_Response;
 
 use Mojo::Base 'Mojo::Message::Response';
 
