@@ -11,7 +11,7 @@ BEGIN {
 	use Mojo::Transaction::HTTP ();
 	use MojoX::Transaction::WebSocket76 ();
 
-    # Override Mojo::Transaction::HTTP::server_read().
+	# Override Mojo::Transaction::HTTP::server_read().
 	*Mojo::Transaction::HTTP::server_read = sub {
 		my ($self, $chunk) = @_;
 
