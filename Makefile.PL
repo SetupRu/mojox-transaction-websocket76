@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-use 5.006;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -22,9 +22,11 @@ WriteMakefile(
 		},
 		no_index  => {directory => ['t']},
 	},
+	BUILD_REQUIRES => {
+		'Test::More' => 0,
+	},
 	PREREQ_PM     => {
 		'Mojolicious' => '2.47',
-		'Test::More'  => 0,
 	},
 	dist          => {COMPRESS => 'gzip -9f', SUFFIX => 'gz'},
 	clean         => {FILES => 'MojoX-Transaction-WebSocket76-*'},
