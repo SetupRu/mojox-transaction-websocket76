@@ -243,7 +243,7 @@ L<http://github.com/dionys/mojox-transaction-websocket76/issues>
 
 =head1 AUTHOR
 
-Denis Ibaev, C<dionys@cpan.org>.
+Denis Ibaev, C<dionys@cpan.org> for Setup.ru.
 
 =head1 COPYRIGHT AND LICENSE
 
